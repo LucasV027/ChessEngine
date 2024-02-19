@@ -1,11 +1,9 @@
 #include <iostream>
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_mixer.h>
+#include "Application/Application.h"
 
-int main(void)
+int main(int argc, char *argv[])
 {
-    std::cout << "Hello world !" << std::endl;
+    Application ChessEngine("ChessEngine", 800, 800, 60);
+    ChessEngine.Run();
 }
