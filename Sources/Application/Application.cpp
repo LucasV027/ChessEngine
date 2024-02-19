@@ -89,7 +89,6 @@ void Application::Run()
 
     while (isRunning)
     {
-
         Uint64 start = SDL_GetPerformanceCounter();
 
         handleEvents();
