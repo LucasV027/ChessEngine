@@ -1,21 +1,25 @@
 #include "../Application/Renderer.h"
 
-Renderer::Renderer() : rRenderer(nullptr) {}
+Renderer::Renderer() : rRenderer(nullptr), police(nullptr) {}
 
 bool Renderer::init(SDL_Window *window)
 {
+    // Renderer initialization
     rRenderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     if (!rRenderer)
     {
+        std::cout << "Renderer could not be created! SDL Error : " << SDL_GetError() << std::endl;
         return false;
     }
 
-    // Loading & assinging values for the chess pieces texture
-    chessPiecesTexture = IMG_LoadTexture(rRenderer, "../Assets/Textures/chess.png");
+    // Textures
+    std::string piecesTexturePath = "../Assets/Textures/chess.png";
+    chessPiecesTexture = IMG_LoadTexture(rRenderer, piecesTexturePath.c_str());
 
     if (!chessPiecesTexture)
     {
-        printf("The renderer could not load Assets/Textures/chess.png ! SDL_Error: %s\n", SDL_GetError());
+        std::cout << "The renderer could not load " << piecesTexturePath << " ! SDL_Error : " << SDL_GetError() << std::endl;
+        return false;
     }
 
     int chessPiecesTextureWidth, chessPiecesTextureHeight;
@@ -30,6 +34,22 @@ bool Renderer::init(SDL_Window *window)
     queenSprite = SDL_Rect{spriteWidth * 4, 0, spriteWidth, spriteHeight};
     kingSprite = SDL_Rect{spriteWidth * 5, 0, spriteWidth, spriteHeight};
 
+    // Font
+    if (TTF_Init() == -1)
+    {
+        std::cout << "TTF_Init initialization error : " << TTF_GetError();
+        return false;
+    }
+
+    std::string fontPath = "../Assets/Fonts/Roboto/Roboto-Black.ttf";
+    police = TTF_OpenFont(fontPath.c_str(), 10);
+    if (!police)
+    {
+        std::cout << "The renderer could not load " << fontPath << " ! SDL_Error : " << SDL_GetError() << std::endl;
+        return false;
+    }
+
+    //
     return true;
 }
 
@@ -66,5 +86,7 @@ void Renderer::drawPieces() {}
 
 Renderer::~Renderer()
 {
+    TTF_CloseFont(police);
+    TTF_Quit();
     SDL_DestroyRenderer(rRenderer);
 }
