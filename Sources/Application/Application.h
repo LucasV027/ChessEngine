@@ -5,6 +5,8 @@
 
 #include <SDL2/SDL.h>
 
+#include "../Application/Renderer.h"
+
 class Application
 {
 public:
@@ -25,4 +27,6 @@ private:
     int maxFPS;
     bool isRunning;
     SDL_Event event;
+
+    Renderer myRenderer;
 };

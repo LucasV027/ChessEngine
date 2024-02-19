@@ -20,6 +20,13 @@ Application::Application(const char *windowName, int width, int height, int _max
         return;
     }
 
+    if (!myRenderer.init(window))
+    {
+        printf("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
+        isRunning = false;
+        return;
+    }
+
     const int SCREEN_TICKS_PER_FRAME = 1000 / maxFPS;
     int frame = 0;
 }
@@ -82,23 +89,15 @@ void Application::Run()
 
     while (isRunning)
     {
+
         Uint64 start = SDL_GetPerformanceCounter();
 
-        // Event loop
         handleEvents();
-
-        // Physics loop
-        Uint32 current = SDL_GetTicks();
-        float dT = (current - lastUpdate) / 1000.0f;
-        lastUpdate = current;
-
-        // Rendering loop
+        myRenderer.render();
 
         Uint64 end = SDL_GetPerformanceCounter();
         float elapsedMS = (end - start) / (float)SDL_GetPerformanceFrequency() * 1000.0f;
-
         SDL_Delay(std::max(0.f, floor(16.666f - elapsedMS)));
-
         frameCounter++;
     }
 
