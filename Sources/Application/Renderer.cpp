@@ -1,6 +1,6 @@
 #include "../Application/Renderer.h"
 
-Renderer::Renderer() : rRenderer(nullptr), police(nullptr) {}
+Renderer::Renderer() : rRenderer(nullptr), police(nullptr), cGame(nullptr) {}
 
 bool Renderer::init(SDL_Window *window)
 {
@@ -26,7 +26,6 @@ bool Renderer::init(SDL_Window *window)
     SDL_QueryTexture(chessPiecesTexture, NULL, NULL, &chessPiecesTextureWidth, &chessPiecesTextureHeight);
     int spriteHeight = chessPiecesTextureHeight / 2;
     int spriteWidth = chessPiecesTextureWidth / 6;
-
     pawnSprite = SDL_Rect{0, 0, spriteWidth, spriteHeight};
     rookSprite = SDL_Rect{spriteWidth * 3, 0, spriteWidth, spriteHeight};
     knightSprite = SDL_Rect{spriteWidth, 0, spriteWidth, spriteHeight};
@@ -52,6 +51,8 @@ bool Renderer::init(SDL_Window *window)
     //
     return true;
 }
+
+void Renderer::linkChessGame(ChessGame *cGame) { this->cGame = cGame; }
 
 void Renderer::render()
 {
@@ -82,7 +83,53 @@ void Renderer::drawBackground()
     }
 }
 
-void Renderer::drawPieces() {}
+void Renderer::drawPieces()
+{
+    for (int y = 0; y < 8; y++)
+    {
+        for (int x = 0; x < 8; x++)
+        {
+            ChessPiece piece = this->cGame->getInBoard(y, x);
+            SDL_Rect sprite;
+
+            switch (piece)
+            {
+            case ChessPiece::None:
+                continue;
+
+            case ChessPiece::WPawn:
+            case ChessPiece::BPawn:
+                sprite = pawnSprite;
+                break;
+            case ChessPiece::WRook:
+            case ChessPiece::BRook:
+                sprite = rookSprite;
+                break;
+            case ChessPiece::WKnight:
+            case ChessPiece::BKnight:
+                sprite = knightSprite;
+                break;
+            case ChessPiece::WBishop:
+            case ChessPiece::BBishop:
+                sprite = bishopSprite;
+                break;
+            case ChessPiece::WQueen:
+            case ChessPiece::BQueen:
+                sprite = queenSprite;
+                break;
+            case ChessPiece::WKing:
+            case ChessPiece::BKing:
+                sprite = kingSprite;
+                break;
+            }
+
+            bool white = (int)piece <= 5;
+            sprite.y = (white ? 128 : 0);
+            SDL_Rect rect{x * 100, y * 100, 100, 100};
+            SDL_RenderCopy(rRenderer, chessPiecesTexture, &sprite, &rect);
+        }
+    }
+}
 
 Renderer::~Renderer()
 {

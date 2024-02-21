@@ -3,7 +3,9 @@
 Application::Application(const char *windowName, int width, int height, int _maxFPS) : windowWidth(width),
                                                                                        windowHeight(height),
                                                                                        isRunning(true),
-                                                                                       maxFPS(_maxFPS)
+                                                                                       maxFPS(_maxFPS),
+                                                                                       chessGame(nullptr)
+
 {
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
     {
@@ -29,6 +31,9 @@ Application::Application(const char *windowName, int width, int height, int _max
 
     const int SCREEN_TICKS_PER_FRAME = 1000 / maxFPS;
     int frame = 0;
+
+    chessGame = new ChessGame();
+    myRenderer.linkChessGame(chessGame);
 }
 
 Application::~Application()

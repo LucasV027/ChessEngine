@@ -6,6 +6,7 @@
 #include <SDL2/SDL.h>
 
 #include "../Application/Renderer.h"
+#include "../Core/ChessGame.h"
 
 class Application
 {
@@ -29,4 +30,6 @@ private:
     SDL_Event event;
 
     Renderer myRenderer;
+
+    ChessGame *chessGame;
 };

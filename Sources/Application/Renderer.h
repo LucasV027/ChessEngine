@@ -7,6 +7,8 @@
 #include <iostream>
 #include <string>
 
+#include "../Core/ChessGame.h"
+
 class Renderer
 {
 public:
@@ -14,6 +16,7 @@ public:
     ~Renderer();
 
     bool init(SDL_Window *window);
+    void linkChessGame(ChessGame *cGame);
     void render();
 
 private:
@@ -34,4 +37,7 @@ private:
 
     // Fonts
     TTF_Font *police;
+
+    // Core
+    ChessGame *cGame;
 };
